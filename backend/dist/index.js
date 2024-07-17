@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const app = (0, express_1.default)();
 const port = 3000;
+const bcrypt_1 = __importDefault(require("bcrypt"));
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const jwt_1 = require("./utils/jwt");
@@ -33,13 +34,14 @@ app.post('/signup', (req, res) => __awaiter(void 0, void 0, void 0, function* ()
             email
         }
     });
+    const hashedPassword = yield bcrypt_1.default.hash(password, 10);
     if (ifExist == null) {
         try {
             const createdUser = yield prisma.details.create({
                 data: {
                     email,
                     name,
-                    password
+                    password: hashedPassword
                 }
             });
             res.status(201).json({ "msg": "user created" });

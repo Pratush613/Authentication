@@ -10,7 +10,7 @@ generator client {
 
 datasource db {
   provider = "mongodb" //your db
-  url      = "" // add your connection string here or in .env()
+  url      = env("DATABASE_URL") // add your connection string here or in .env()
 }
 
 model details {
